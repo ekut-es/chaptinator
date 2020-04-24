@@ -5,18 +5,17 @@ with open("README.md", "r") as fh:
 
 setup(
     name='chaptinator',
-    version='0.2',
+    version='0.3',
     packages=find_packages(),
     url="https://github.com/ekut-es/chaptinator",
-    # license='',
+    license='Unlicense',
     author="Michael Kuhn & Alexander von Bernuth",
     author_email="michael.kuhn@uni-tuebingen.de",
     description="Add chapters to video based on scene cuts",
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.8',
