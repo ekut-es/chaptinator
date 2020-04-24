@@ -13,22 +13,24 @@ Powershell, ...).
 
 Then install this package via pip. For a global installation use
 
-```
+```bash
 sudo pip install chaptinator
 ```
 
 and for a user-local installation use
 
-```
+```bash
 pip install --user chaptinator
 ```
 
 
 ## Usage
 
-`chaptinator VIDEO [-t TITLE] [-a AUTHOR] [-c CHANGE_THRESH] [-s] [-m METADATA_FILE]`
+```bash
+chaptinator VIDEO [-t TITLE] [-a AUTHOR] [-c CHANGE_THRESH] [-s] [-m METADATA_FILE]
+```
 
-`-t TITEL` sets the title in the metadata (default: filename)
+`-t TITLE` sets the title in the metadata (default: filename)
 
 `-a ARTIST` sets the artist in the metadata
 
@@ -44,6 +46,16 @@ ratio
 metadata file. This file has to have the structure described in
 https://ffmpeg.org/ffmpeg-formats.html#Metadata-1
 
+
+## Example
+
+```bash
+# increase cut detection threshold to 0.4 and scale the video
+chaptinator foo.mp4 -t "Video Title" -a "Author Name" -c 0.4 -s
+
+# read cuts from metadata file
+chaptinator foo.mp4 -m metadata.txt
+```
 
 ## Use Cases
 
