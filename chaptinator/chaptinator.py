@@ -62,10 +62,29 @@ title={i}
     return metadata
 
 
-def write_new_video_file(filename_output, meta_file_name, scale, video_file_name):
-    codec_params = ['-codec', 'copy']
+def write_new_video_file(filename_output, meta_file_name, scale,
+    reduce_framerate, compress_audio, video_file_name):
+
+    codec_params = []
+
     if scale:
-        codec_params = ["-vf", "scale=-1:720", "-crf", "23", "-strict", "-2"]
+        codec_params += ["-vf", "scale=-1:720"]
+
+    if reduce_framerate:
+        codec_params += ["-r", "5"]
+
+    if compress_audio:
+        codec_params += ["-c:a", "libmp3lame",
+                         "-q:a", "8"]
+
+    if scale or reduce_framerate or compress_audio:
+        codec_params += ["-c:v", "libx265",
+                         "-crf", "28",
+                         "-pix_fmt", "yuv420p",
+                         "-preset", "ultrafast"]
+    else:
+        codec_params = ['-codec', 'copy']
+
     command = ['ffmpeg',
                '-y',
                '-i', video_file_name,
@@ -95,6 +114,10 @@ class Main:
                                  help="set threshold for chapter detection")
         self.parser.add_argument("-s", "--scale", action="store_true",
                                  help="scale down to 720p")
+        self.parser.add_argument("-r", "--reduce_framerate", action="store_true",
+                                 help="reduce framerate to 5fps (optimal for slides)")
+        self.parser.add_argument("-v", "--compress_audio", action="store_true",
+                                 help="convert audio to VBR MP3 with quality 8 (optimal for speech)")
         self.parser.add_argument("-m", "--meta", type=str,
                                  help="use existing meta data file "
                                       "(disables automated chapter detection)")
@@ -113,7 +136,9 @@ class Main:
         else:
             meta_file_name = self.extract_metadata_from_video(title)
 
-        write_new_video_file(filename_output, meta_file_name, self.args.scale, self.args.VIDEO)
+        write_new_video_file(filename_output, meta_file_name, self.args.scale,
+            self.args.reduce_framerate, self.args.compress_audio,
+            self.args.VIDEO)
 
     def extract_metadata_from_video(self, title):
         cuts_raw = video_extract_cuts(self.args.VIDEO, self.args.change_threshold)
