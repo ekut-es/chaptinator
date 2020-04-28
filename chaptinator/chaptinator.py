@@ -78,8 +78,8 @@ def write_new_video_file(filename_output, meta_file_name, scale,
                          "-q:a", "8"]
 
     if scale or reduce_framerate or compress_audio:
-        codec_params += ["-c:v", "libx265",
-                         "-crf", "28",
+        codec_params += ["-c:v", "libx264",
+                         "-crf", "23",
                          "-pix_fmt", "yuv420p",
                          "-preset", "ultrafast"]
     else:
