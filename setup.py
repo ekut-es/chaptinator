@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='chaptinator',
-    version='0.4',
+    version='0.5',
     packages=find_packages(),
     url="https://github.com/ekut-es/chaptinator",
     license='Unlicense',

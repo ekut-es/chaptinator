@@ -62,22 +62,28 @@ title={i}
     return metadata
 
 
-def write_new_video_file(filename_output, meta_file_name, scale,
-    reduce_framerate, compress_audio, video_file_name):
+def write_new_video_file(filename_output, meta_file_name, settings,
+    video_file_name):
 
     codec_params = []
 
-    if scale:
+    if settings.scale:
         codec_params += ["-vf", "scale=-1:720"]
 
-    if reduce_framerate:
+    if settings.optimize:
+        codec_params += ["-tune", "stillimage"]
+
+    if settings.reduce_framerate:
         codec_params += ["-r", "5"]
 
-    if compress_audio:
+    if settings.compress_audio:
         codec_params += ["-c:a", "libmp3lame",
                          "-q:a", "8"]
 
-    if scale or reduce_framerate or compress_audio:
+    if settings.downmix_mono:
+        codec_params += ["-ac", "1"]
+
+    if settings.scale or settings.reduce_framerate or settings.compress_audio:
         codec_params += ["-c:v", "libx264",
                          "-crf", "23",
                          "-pix_fmt", "yuv420p",
@@ -116,8 +122,12 @@ class Main:
                                  help="scale down to 720p")
         self.parser.add_argument("-r", "--reduce_framerate", action="store_true",
                                  help="reduce framerate to 5fps (optimal for slides)")
+        self.parser.add_argument("-o", "--optimize", action="store_true",
+                                 help="activate ffmpeg tune for stillimage (optimal for slides)")
         self.parser.add_argument("-v", "--compress_audio", action="store_true",
                                  help="convert audio to VBR MP3 with quality 8 (optimal for speech)")
+        self.parser.add_argument("-d", "--downmix_mono", action="store_true",
+                                 help="downmix both audio channels into a single mono audio channel")
         self.parser.add_argument("-m", "--meta", type=str,
                                  help="use existing meta data file "
                                       "(disables automated chapter detection)")
@@ -136,8 +146,7 @@ class Main:
         else:
             meta_file_name = self.extract_metadata_from_video(title)
 
-        write_new_video_file(filename_output, meta_file_name, self.args.scale,
-            self.args.reduce_framerate, self.args.compress_audio,
+        write_new_video_file(filename_output, meta_file_name, self.args,
             self.args.VIDEO)
 
     def extract_metadata_from_video(self, title):

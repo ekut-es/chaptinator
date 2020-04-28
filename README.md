@@ -27,7 +27,7 @@ pip install --user chaptinator
 ## Usage
 
 ```bash
-chaptinator VIDEO [-t TITLE] [-a AUTHOR] [-c CHANGE_THRESH] [-s] [-r] [-v] [-m METADATA_FILE]
+chaptinator VIDEO [-t TITLE] [-a AUTHOR] [-c CHANGE_THRESH] [-s] [-r] [-v] [-o] [-d] [-m METADATA_FILE]
 ```
 
 `-t TITLE` sets the title in the metadata (default: filename)
@@ -46,11 +46,16 @@ ratio
 powerpoint slides are the sole video content. Lower values cause problems with
 some browser video players
 
+`-o` activates the ffmpeg tune 'stillimage' that lowers the deblocking filter,
+optimizing for still images like slides
+
 `-v` converts the audio to MP3 with VBR (Variable BitRate) and a quality
 setting of 8, which is optimal for speech with relatively long segments of
 silence.
 (Lame is compiled into the standard `ffmpeg` library while the Frauenhofer AAC,
 which supports VBR, is not)
+
+`-d` downmixes both audio channels into a single mono audio channel
 
 `-m METADATA_FILE` disables the cut detection and instead uses the provided
 metadata file. This file has to have the structure described in
