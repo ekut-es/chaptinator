@@ -76,13 +76,6 @@ def write_new_video_file(filename_output, meta_file_name, settings,
     if settings.reduce_framerate:
         codec_params += ["-r", "5"]
 
-    if settings.compress_audio:
-        codec_params += ["-c:a", "libmp3lame",
-                         "-q:a", "8"]
-
-    if settings.downmix_mono:
-        codec_params += ["-ac", "1"]
-
     if settings.scale or settings.optimize or settings.reduce_framerate:
         codec_params += ["-c:v", "libx264",
                          "-crf", "23",
@@ -90,6 +83,18 @@ def write_new_video_file(filename_output, meta_file_name, settings,
                          "-preset", "ultrafast"]
     else:
         codec_params += ['-c:v', 'copy']
+
+
+    if settings.compress_audio:
+        codec_params += ["-q:a", "8"]
+
+    if settings.downmix_mono:
+        codec_params += ["-ac", "1"]
+
+    if settings.compress_audio or settings.downmix_mono:
+        codec_params += ["-c:a", "libmp3lame"]
+    else:
+        codec_params += ['-c:a', 'copy']
 
     command = ['ffmpeg',
                '-y',
