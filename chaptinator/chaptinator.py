@@ -83,7 +83,7 @@ def write_new_video_file(filename_output, meta_file_name, settings,
     if settings.downmix_mono:
         codec_params += ["-ac", "1"]
 
-    if settings.scale or settings.reduce_framerate or settings.compress_audio:
+    if settings.scale or or settings.optimize or settings.reduce_framerate:
         codec_params += ["-c:v", "libx264",
                          "-crf", "23",
                          "-pix_fmt", "yuv420p",
