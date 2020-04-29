@@ -89,7 +89,7 @@ def write_new_video_file(filename_output, meta_file_name, settings,
                          "-pix_fmt", "yuv420p",
                          "-preset", "ultrafast"]
     else:
-        codec_params = ['-codec', 'copy']
+        codec_params += ['-c:v', 'copy']
 
     command = ['ffmpeg',
                '-y',
